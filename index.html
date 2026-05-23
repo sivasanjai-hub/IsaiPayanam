@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IsaiPayanam</title>
+    <!-- Add Favicon matching the IsaiPayanam Headphones Logo -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><path fill='%231db954' d='M256 80C149.9 80 62.4 159.4 49.6 262c9.4-3.8 19.6-6 30.4-6c26.5 0 48 21.5 48 48V432c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V256C0 114.6 114.6 0 256 0s256 114.6 256 256v176c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48V304c0-26.5 21.5-48 48-48c10.8 0 21 2.1 30.4 6C449.6 159.4 362.1 80 256 80z'/></svg>">
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="app-container">
+        <!-- SIDEBAR (Hidden on mobile) -->
+        <aside class="sidebar" id="sidebar">
+            <div class="logo">
+                <i class="fa-solid fa-headphones-simple"></i>
+                <span>IsaiPayanam</span>
+            </div>
+            <nav class="nav-links">
+                <a href="#" class="nav-item active" data-target="homeView"><i class="fa-solid fa-house"></i> Home</a>
+                <a href="#" class="nav-item" data-target="searchView"><i class="fa-solid fa-magnifying-glass"></i>
+                    Search</a>
+                <a href="#" class="nav-item" data-target="libraryView"><i class="fa-solid fa-book"></i> Your Library</a>
+            </nav>
+            <div class="nav-links secondary-nav">
+                <a href="#" id="createPlaylistBtn"><i class="fa-solid fa-square-plus"></i> Create Playlist</a>
+                <a href="#" class="nav-item" data-target="likedView"><i class="fa-solid fa-heart"
+                        style="color:var(--accent-color);"></i> Liked Songs</a>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <!-- TOP NAV -->
+            <header class="top-nav">
+                <div class="nav-arrows">
+                    <button id="backBtn"><i class="fa-solid fa-chevron-left"></i></button>
+                    <button id="forwardBtn"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+
+                <!-- Search bar visible only in search view -->
+                <div class="search-bar-container" id="searchBarContainer" style="display:none;">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="searchInput" placeholder="What do you want to listen to?">
+                </div>
+
+                <div class="user-profile">
+                    <button class="upgrade-btn" id="premiumBtn">Explore Premium</button>
+                    <button class="profile-btn" id="profileBtn"><i class="fa-regular fa-user"></i></button>
+                </div>
+            </header>
+
+            <!-- HOME VIEW: List of Categories -->
+            <div id="homeView" class="view-section active">
+                <h2 class="section-title">Hello Everyone!</h2>
+                <div class="category-grid" id="categoryGrid">
+                    <!-- Categories will be injected here via JS -->
+                </div>
+            </div>
+
+            <!-- SEARCH VIEW -->
+            <div id="searchView" class="view-section" style="display: none;">
+                <h2 class="section-title">Search Results</h2>
+                <div class="song-list-container">
+                    <div class="song-list" id="searchResultsList">
+                        <!-- Search results injected here -->
+                    </div>
+                </div>
+                <h2 class="section-title" style="margin-top:20px;">Browse All</h2>
+                <div class="category-grid" id="browseGrid">
+                    <!-- Same as categories -->
+                </div>
+            </div>
+
+            <!-- LIBRARY VIEW -->
+            <div id="libraryView" class="view-section" style="display: none;">
+                <h2 class="section-title">Your Library</h2>
+                <div class="category-grid" id="libraryGrid">
+                    <!-- User playlists injected here -->
+                </div>
+            </div>
+
+            <!-- PLAYLIST/CATEGORY VIEW: Single Category's Songs -->
+            <div id="playlistView" class="view-section" style="display: none;">
+                <div class="playlist-header">
+                    <img id="playlistCover"
+                        src="https://images.unsplash.com/photo-1614680376593-902f74cf0d41?q=80&w=400"
+                        alt="Playlist Cover" class="playlist-cover">
+                    <div class="playlist-info">
+                        <span class="playlist-type">Playlist</span>
+                        <h1 class="playlist-title" id="playlistTitle">Top Hits Tamil</h1>
+                        <p class="playlist-description" id="playlistDesc">The best songs curated just for you.</p>
+                        <div class="playlist-stats">
+                            <i class="fa-brands fa-spotify"></i>
+                            <span>IsaiPayanam</span>
+                            <span class="dot">•</span>
+                            <span id="songCount">0 songs</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="song-list-container">
+                    <div class="play-row">
+                        <button class="main-play-btn" id="mainPlayBtn"><i class="fa-solid fa-play"></i></button>
+                    </div>
+                    <div class="song-list-header">
+                        <div class="col-title">#</div>
+                        <div class="col-title">Title</div>
+                        <div class="col-title desktop-only">Album</div>
+                        <div class="col-title"><i class="fa-regular fa-clock"></i></div>
+                    </div>
+                    <div class="song-list" id="songList">
+                        <!-- Songs will be injected here via JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- LIKED SONGS VIEW -->
+            <div id="likedView" class="view-section" style="display: none;">
+                <div class="playlist-header">
+                    <div class="liked-cover-large"><i class="fa-solid fa-heart"></i></div>
+                    <div class="playlist-info">
+                        <span class="playlist-type">Playlist</span>
+                        <h1 class="playlist-title">Liked Songs</h1>
+                        <div class="playlist-stats">
+                            <i class="fa-regular fa-user"></i>
+                            <span>You</span>
+                            <span class="dot">•</span>
+                            <span id="likedSongCount">0 songs</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="song-list-container">
+                    <div class="play-row">
+                        <button class="main-play-btn" id="likedPlayBtn"><i class="fa-solid fa-play"></i></button>
+                    </div>
+                    <div class="song-list-header">
+                        <div class="col-title">#</div>
+                        <div class="col-title">Title</div>
+                        <div class="col-title desktop-only">Album</div>
+                        <div class="col-title"><i class="fa-regular fa-clock"></i></div>
+                    </div>
+                    <div class="song-list" id="likedSongList">
+                        <!-- Liked Songs will be injected here -->
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!-- ADMIN VIEW -->
+        <div id="adminView" class="view-section" style="display: none; padding-bottom: 50px;">
+            <div class="playlist-header"
+                style="background: linear-gradient(to bottom, #8a2387, #e94057, #f27121); display: flex; justify-content: space-between; align-items: center;">
+                <div class="playlist-info">
+                    <h1 class="playlist-title">Admin Panel</h1>
+                    <p style="color:var(--text-secondary);">Manage Categories and Songs (Create, Read, Update, Delete)
+                    </p>
+                </div>
+                <button id="adminLogoutBtn"
+                    style="padding: 10px 20px; background: rgba(0,0,0,0.5); border: 1px solid white; color: white; border-radius: 20px; cursor: pointer; font-weight: bold;">Logout
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+            </div>
+            <div class="song-list-container" style="padding-top: 24px;">
+                <div class="admin-controls"
+                    style="background: rgba(255,255,255,0.05); padding: 24px; border-radius: 12px; margin-bottom: 24px;">
+                    <h3 style="margin-bottom: 16px;">Add New Category</h3>
+                    <div style="display: grid; gap: 12px; grid-template-columns: 1fr 1fr;">
+                        <input type="text" id="adminCategoryName" placeholder="Category Name"
+                            style="padding: 10px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); color: white; border-radius: 6px;">
+                        <input type="file" id="adminCategoryImage" accept="image/*"
+                            style="padding: 10px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); color: white; border-radius: 6px;">
+                    </div>
+                    <button id="adminAddCategoryBtn"
+                        style="margin-top: 16px; padding: 10px 24px; background: var(--accent-color); color: black; border: none; border-radius: 20px; font-weight: bold; cursor: pointer;">Add
+                        Category</button>
+                </div>
+
+                <div class="admin-controls"
+                    style="background: rgba(255,255,255,0.05); padding: 24px; border-radius: 12px; margin-bottom: 24px;">
+                    <h3 style="margin-bottom: 16px;">Add New Song</h3>
+                    <div style="display: grid; gap: 12px; grid-template-columns: 1fr 1fr;">
+                        <input type="text" id="adminSongTitle" placeholder="Song Title"
+                            style="padding: 10px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); color: white; border-radius: 6px;">
+                        <input type="text" id="adminSongArtist" placeholder="Artist Name"
+                            style="padding: 10px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); color: white; border-radius: 6px;">
+                        <input type="text" id="adminSongSrc" placeholder="Audio URL / File Path"
+                            style="padding: 10px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); color: white; border-radius: 6px;">
+                        <select id="adminSongCategory"
+                            style="padding: 10px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); color: white; border-radius: 6px;">
+                            <!-- Options injected by JS -->
+                        </select>
+                    </div>
+                    <button id="adminAddSongBtn"
+                        style="margin-top: 16px; padding: 10px 24px; background: var(--accent-color); color: black; border: none; border-radius: 20px; font-weight: bold; cursor: pointer;">Add
+                        Song</button>
+                </div>
+
+                <h3 style="margin-bottom: 16px;">Existing Library (Read & Delete)</h3>
+                <input type="text" id="adminSearchInput" placeholder="Search songs by title, artist, or category..." 
+                    style="width: 100%; padding: 10px; margin-bottom: 16px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); color: white; border-radius: 6px;">
+                <div id="adminSongList"
+                    style="display: flex; flex-direction: column; gap: 8px; max-height: 400px; overflow-y: auto; padding-right: 10px; background: rgba(0,0,0,0.2); padding: 16px; border-radius: 8px;">
+                    <!-- Songs injected by JS -->
+                </div>
+
+                <h3 style="margin-bottom: 16px; margin-top: 24px;">Existing Categories (Read & Delete)</h3>
+                <div id="adminCategoryList"
+                    style="display: flex; flex-direction: column; gap: 8px; max-height: 300px; overflow-y: auto; padding-right: 10px; background: rgba(0,0,0,0.2); padding: 16px; border-radius: 8px;">
+                    <!-- Categories injected by JS -->
+                </div>
+            </div>
+        </div>
+        </main>
+    </div>
+
+    <!-- BOTTOM MOBILE NAV -->
+    <nav class="mobile-bottom-nav">
+        <a href="#" class="nav-item active" data-target="homeView"><i
+                class="fa-solid fa-house"></i><span>Home</span></a>
+        <a href="#" class="nav-item" data-target="searchView"><i
+                class="fa-solid fa-magnifying-glass"></i><span>Search</span></a>
+        <a href="#" class="nav-item" data-target="libraryView"><i class="fa-solid fa-book"></i><span>Library</span></a>
+    </nav>
+
+    <!-- PLAYER -->
+    <footer class="music-player">
+        <div class="player-left">
+            <img id="cover" src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=150" alt="Cover">
+            <div class="song-info">
+                <h4 id="songTitle">Select a song</h4>
+                <p id="artistName">Unknown Artist</p>
+            </div>
+            <button class="like-btn" id="playerLikeBtn"><i class="fa-regular fa-heart"></i></button>
+        </div>
+
+        <div class="player-center">
+            <div class="controls">
+                <button class="control-btn desktop-only"><i class="fa-solid fa-shuffle"></i></button>
+                <button class="control-btn" id="prevBtn"><i class="fa-solid fa-backward-step"></i></button>
+                <button class="play-btn" id="playBtn"><i class="fa-solid fa-play"></i></button>
+                <button class="control-btn" id="nextBtn"><i class="fa-solid fa-forward-step"></i></button>
+                <button class="control-btn desktop-only"><i class="fa-solid fa-repeat"></i></button>
+            </div>
+            <div class="progress-container">
+                <span id="currentTime" class="desktop-only">0:00</span>
+                <div class="progress-bar-wrapper" id="progressContainer">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+                <span id="duration" class="desktop-only">0:00</span>
+            </div>
+        </div>
+
+        <div class="player-right">
+            <i class="fa-solid fa-volume-high" id="volumeIcon"></i>
+            <div class="volume-bar-wrapper" id="volumeContainer">
+                <div class="volume-bar" id="volumeBar"></div>
+            </div>
+        </div>
+    </footer>
+
+    <audio id="audio"></audio>
+
+    <!-- MODALS -->
+    <!-- Premium Modal -->
+    <div class="modal-overlay" id="premiumModal">
+        <div class="modal-content glass-3d">
+            <button class="close-modal"><i class="fa-solid fa-xmark"></i></button>
+            <div class="modal-icon"><i class="fa-solid fa-crown"></i></div>
+            <h2 class="modal-title">Premium Experience</h2>
+            <p class="modal-text">
+                "Welcome to IsaiPayanam! This platform is developed exclusively for you.
+                Enjoy a fully user-friendly, uninterrupted musical journey—completely free of charge, forever.
+                Why pay for music when the rhythm of life belongs to everyone?"
+            </p>
+            <button class="modal-action-btn">Start Listening</button>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div class="modal-overlay" id="profileModal">
+        <div class="modal-content glass-3d profile-card">
+            <button class="close-modal"><i class="fa-solid fa-xmark"></i></button>
+            <div class="profile-header-bg"></div>
+            <div class="profile-avatar"><img
+                    src="https://ui-avatars.com/api/?name=Sanjai&background=1db954&color=fff&size=150" alt="Sanjai">
+            </div>
+
+            <div class="profile-details" style="text-align: center; margin-bottom: 24px; padding-top: 20px;">
+                <h1 style="margin-bottom: 8px; color: var(--accent-color);">Sanjai</h1>
+                <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 20px;">Creator of IsaiPayanam &
+                    Music Enthusiast.</p>
+
+                <hr style="border-color: rgba(255,255,255,0.1); margin-bottom: 20px;">
+
+                <div id="adminLoginSection">
+                    <p style="font-size: 14px; margin-bottom: 12px; color: #ccc;">If you are the admin, please log in to
+                        edit the application.</p>
+                    <input type="text" id="adminUsername" placeholder="Username"
+                        style="width: 100%; padding: 10px; margin-bottom: 10px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); color: white; border-radius: 6px;">
+                    <input type="password" id="adminPassword" placeholder="Password"
+                        style="width: 100%; padding: 10px; margin-bottom: 16px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); color: white; border-radius: 6px;">
+                    <button id="adminLoginBtn" class="modal-action-btn" style="width: 100%;">Login as Admin</button>
+                    <p id="adminErrorMsg" style="color: #ff4d4d; font-size: 12px; display: none; margin-top: 8px;">
+                        Incorrect username or password.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
